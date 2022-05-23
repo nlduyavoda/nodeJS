@@ -1,14 +1,65 @@
 require("dotenv").config();
+import { ApolloServer, gql } from "apollo-server";
 import "reflect-metadata";
-import express from "express";
-import Env from "./config/emvironment";
 import { createConnection } from "typeorm";
+import Env from "./config/emvironment";
 import { User } from "./entity/index";
-const cors = require("cors");
+import { getUser, getDetailUser, inputUser, createUser } from "./test";
+const books = [
+  {
+    title: "The Awakening",
+    author: "Kate Chopin",
+  },
+  {
+    title: "City of Glass",
+    author: "Paul Auster",
+  },
+];
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+const typeDefs = () => {
+  return gql`
+    type Book {
+      title: String
+      author: String
+    }
+    type User {
+      userName: String
+      Email: String
+      Password: String
+    }
+    type Query {
+      books: [Book]
+      users: [User]
+      user(id: ID!): User
+    }
+    type Mutation {
+      postuser(userName: String!, Email: String!, Password: String!): User
+    }
+  `;
+};
+
+const resolvers = {
+  Query: {
+    books: () => books,
+    users: async () => {
+      const data = await getUser().then((res) => res);
+      return data;
+    },
+    user: async (parent: any, agrs: any) => {
+      console.log("agrs :>> ", agrs.id);
+      const data = await getDetailUser(agrs.id).then((res) => res);
+      console.log("getDetailUser :>> ", data);
+      return data;
+    },
+  },
+  Mutation: {
+    postuser: async (_: any, input: User) => {
+      const user = await createUser(input);
+      return user;
+    },
+  },
+};
+
 const main = async () => {
   await createConnection({
     type: "postgres",
@@ -20,9 +71,15 @@ const main = async () => {
     port: 3001,
     entities: [User],
   });
-  const app = express();
-  app.use(() => {
-    console.log("server is listenning on port 3001");
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
+
+  const port = process.env.PORT || 3000;
+
+  apolloServer.listen(port, () => {
+    console.log(`server is listenning on port ${port}`);
   });
 };
 main().catch((err) => {
