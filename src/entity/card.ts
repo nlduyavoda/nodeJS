@@ -21,6 +21,9 @@ export class Card extends BaseEntity {
   @Column({ unique: true })
   description!: string;
 
+  @Column({ nullable: true, unique: true })
+  image!: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

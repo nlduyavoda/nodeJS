@@ -33,6 +33,16 @@ export const postUser = async (input: User) => {
 };
 
 //card
+export const getCard = (id: any) => {
+  try {
+    const data = Card.findOne({
+      where: { id: id },
+    });
+    return data;
+  } catch (error) {
+    console.log("error :>> ", error);
+  }
+};
 
 export const getCards = () => {
   try {
@@ -48,9 +58,24 @@ export const postCard = (input: any) => {
     const newCard = new Card();
     newCard["title"] = input["title"];
     newCard["price"] = input["price"];
+    // newCard["image"] = input["image"];
     newCard["description"] = input["description"];
+
     return newCard.save();
   } catch (error) {
     console.log("error :>> ", error);
+  }
+};
+
+export const putCard = async (input: any) => {
+  console.log("input :>> ", input);
+  const newCard = await Card.findOne({
+    where: { id: input.id },
+  });
+  if (newCard) {
+    newCard.image = input.image;
+    await Card.save(newCard);
+  } else {
+    console.log("card is not exist");
   }
 };
