@@ -27,6 +27,7 @@ export const Resolvers = {
       const data = await getCards()?.then((res) => res);
       return data;
     },
+    uploads: (_: any, args: any) => {},
   },
   Mutation: {
     createUser: async (_: any, input: User) => {
@@ -40,6 +41,13 @@ export const Resolvers = {
     editCard: async (_: any, input: any) => {
       const card = await putCard(input);
       return card;
+    },
+    singleUpload: (_: any, { file }: any) => {
+      console.log("file :>> ", file);
+      // return file.then((file: File) => {
+      //   return file;
+      // });
+      return [];
     },
   },
 };
