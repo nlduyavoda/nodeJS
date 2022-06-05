@@ -9,6 +9,8 @@ import {
   putCard,
 } from "../repository";
 
+const { pipeline } = require("stream/promises");
+
 export const Resolvers = {
   Query: {
     users: async () => {
@@ -27,7 +29,6 @@ export const Resolvers = {
       const data = await getCards()?.then((res) => res);
       return data;
     },
-    uploads: (_: any, args: any) => {},
   },
   Mutation: {
     createUser: async (_: any, input: User) => {
@@ -42,24 +43,15 @@ export const Resolvers = {
       const card = await putCard(input);
       return card;
     },
-    singleUpload: (_: any, { file }: any) => {
-      console.log("xxx :>> ");
-      const fileData = dataURLtoFile(file, "hello.txt");
-      console.log("fileData :>> ", fileData);
-      return fileData;
+    singleUpload: async (_: any, { file }: any) => {
+      console.log("step-1 :>> ", file);
+      const { createReadStream, filename, mimetype, encoding } = await file;
+      const stream = createReadStream();
+      const out = require("fs").createWriteStream("local-file-output.txt");
+      stream.pipe(out);
+      await pipeline(out);
+
+      return { filename, mimetype, encoding };
     },
   },
 };
-function dataURLtoFile(dataurl: any, filename: string) {
-  var arr = dataurl.split(","),
-    mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]),
-    n = bstr.length,
-    u8arr = new Uint8Array(n);
-
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-
-  return new File([u8arr], filename, { type: mime });
-}
