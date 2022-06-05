@@ -7,6 +7,7 @@ export const getUsers = async () => {
     return data;
   } catch (e) {
     console.error(e);
+    return;
   }
 };
 
@@ -18,6 +19,7 @@ export const getUser = async (id: number) => {
     return data;
   } catch (error) {
     console.log("error :>> ", error);
+    return;
   }
 };
 export const postUser = async (input: User) => {
@@ -29,6 +31,7 @@ export const postUser = async (input: User) => {
     return await _newTodo.save();
   } catch (e) {
     console.error(e);
+    return;
   }
 };
 
@@ -41,6 +44,7 @@ export const getCard = (id: any) => {
     return data;
   } catch (error) {
     console.log("error :>> ", error);
+    return;
   }
 };
 
@@ -50,6 +54,7 @@ export const getCards = () => {
     return data;
   } catch (error) {
     console.log("error :>> ", error);
+    return;
   }
 };
 
@@ -64,6 +69,7 @@ export const postCard = (input: any) => {
     return newCard.save();
   } catch (error) {
     console.log("error :>> ", error);
+    return;
   }
 };
 
