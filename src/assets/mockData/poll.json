@@ -1,0 +1,29 @@
+ [
+    {
+      "id": "123",
+      "collectionId": "123",
+      "question": "I don't know who you are !",
+      "answers": [
+        { "id": "answer-1", "answer": "hello!" },
+        { "id": "answer-2", "answer": "hello!" },
+        { "id": "answer-3", "answer": "hello!" }
+      ],
+      "locked": "Mon Jun 13 2022 09:56:39 GMT+0700 (Indochina Time)",
+      "modifiedAt": "Mon Jun 13 2022 09:56:39 GMT+0700 (Indochina Time)",
+      "createdAt": "Mon Jun 13 2022 09:56:39 GMT+0700 (Indochina Time)"
+    },
+    {
+      "id": "124",
+      "collectionId": "124",
+      "question": "I don't know who you are !",
+      "answers": [
+        { "id": "answer-4", "answer": "hello!" },
+        { "id": "answer-5", "answer": "hello!" },
+        { "id": "answer-6", "answer": "hello!" }
+      ],
+      "locked": "Mon Jun 13 2022 09:56:39 GMT+0700 (Indochina Time)",
+      "modifiedAt": "Mon Jun 13 2022 09:56:39 GMT+0700 (Indochina Time)",
+      "createdAt": "Mon Jun 13 2022 09:56:39 GMT+0700 (Indochina Time)"
+    }
+  ]
+

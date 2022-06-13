@@ -6,6 +6,7 @@ import cors from "cors";
 import fs from "fs";
 import { EditCard, parseBody, rebaseCard, saveCard } from "./controller";
 import { rebaseData } from "./assets/mockData/cardDefault";
+import { getPoll } from "./controller/poll";
 
 // const dataToReSet = {
 //   card: [
@@ -47,6 +48,8 @@ const main = async () => {
       response.status(401).send("Authorization required!");
     }
   });
+
+  app.get("/:collectionId", (req: any, res: any) => getPoll(req, res));
 
   app.post("/", async (request: any, response: any) => {
     const requestBody = await parseBody(request);

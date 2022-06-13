@@ -20,7 +20,7 @@ export const EditCard = async ({
   request: any;
 }) => {
   const body = await parseBody(request);
-  const cards = await getCardFromFile();
+  const cards = await getCardFromFile(jsonPath);
   const requestCard = { id: +id, ...body.card };
   const newarr = await cards.map((card: Card) => {
     if (requestCard.id === card.id) {
@@ -42,7 +42,7 @@ export const EditCard = async ({
 
 export const saveCard = async (path: string, card: any) => {
   const newCard = await cardGenerator(card);
-  const oldCards = await getCardFromFile();
+  const oldCards = await getCardFromFile(jsonPath);
   console.log("alexander ------ :>> ", oldCards);
   const newCards = JSON.stringify([newCard, ...oldCards]);
   await fs.writeFile(path, newCards, (err) => {
@@ -68,8 +68,8 @@ export const cardGenerator = (card: Card) => {
   };
 };
 
-export const getCardFromFile = async () => {
+export const getCardFromFile = async (url: string) => {
   // var content;
-  const data = await fs.readFileSync(jsonPath, "utf8");
+  const data = await fs.readFileSync(url, "utf8");
   return JSON.parse(data);
 };
