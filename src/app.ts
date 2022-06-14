@@ -4,7 +4,13 @@ import path from "path";
 import { jsonPath } from "./utils";
 import cors from "cors";
 import fs from "fs";
-import { EditCard, parseBody, rebaseCard, saveCard } from "./controller";
+import {
+  EditCard,
+  pagination,
+  parseBody,
+  rebaseCard,
+  saveCard,
+} from "./controller";
 import { rebaseData } from "./assets/mockData/cardDefault";
 
 // const dataToReSet = {
@@ -46,6 +52,14 @@ const main = async () => {
     } else {
       response.status(401).send("Authorization required!");
     }
+  });
+
+  app.get("/:slug", async (req: any, res: any) => {
+    const currentPage = req.params.slug;
+    console.log("currentPage :>> ", currentPage);
+    const cards = await pagination(currentPage);
+    console.log("cards: ", cards);
+    res.send(cards);
   });
 
   app.post("/", async (request: any, response: any) => {

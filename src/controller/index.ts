@@ -20,7 +20,7 @@ export const EditCard = async ({
   request: any;
 }) => {
   const body = await parseBody(request);
-  const cards = await getCardFromFile();
+  const cards = await getCardFromFile(jsonPath);
   const requestCard = { id: +id, ...body.card };
   const newarr = await cards.map((card: Card) => {
     if (requestCard.id === card.id) {
@@ -42,7 +42,7 @@ export const EditCard = async ({
 
 export const saveCard = async (path: string, card: any) => {
   const newCard = await cardGenerator(card);
-  const oldCards = await getCardFromFile();
+  const oldCards = await getCardFromFile(jsonPath);
   console.log("alexander ------ :>> ", oldCards);
   const newCards = JSON.stringify([newCard, ...oldCards]);
   await fs.writeFile(path, newCards, (err) => {
@@ -68,8 +68,50 @@ export const cardGenerator = (card: Card) => {
   };
 };
 
-export const getCardFromFile = async () => {
+export const getCardFromFile = async (url: string) => {
   // var content;
-  const data = await fs.readFileSync(jsonPath, "utf8");
+  const data = await fs.readFileSync(url, "utf8");
   return JSON.parse(data);
 };
+
+export const pagination = async (slug: number) => {
+  const cards = await getCardFromFile(jsonPath);
+  const number__item__in__page = 2;
+  const currentPage = slug - 1;
+  const start = currentPage * number__item__in__page;
+  const end = start + number__item__in__page;
+  const cards__paginate = cards.slice(start, end);
+  const totalPage = cards.length / number__item__in__page;
+
+  // console.log("object :>> ", {
+  //   cards: cards__paginate,
+  //   totalPage: totalPageArr(slug, cards.length),
+  //   isNext: currentPage < cards.length,
+  //   isPrevous: currentPage <= cards.length && currentPage > 1,
+  // });
+
+  // async () => await totalPageArr(slug, cards.length),
+  return {
+    cards: cards__paginate,
+    totalPage: totalPage,
+    isNext: currentPage < cards.length,
+    isPrevous: currentPage <= cards.length && currentPage > 1,
+  };
+};
+
+export const totalPageArr = (currentPage: number, cardsLength: number) => {
+  const pre = +currentPage - 1;
+  const next = +currentPage + 1;
+  const doubleNext = +currentPage + 2;
+  const doublePre = +currentPage - 2;
+
+  if (currentPage === 1) {
+    return [currentPage, next, doubleNext];
+  }
+  if (currentPage === cardsLength) {
+    return [doublePre, pre, currentPage];
+  } else {
+    return [pre, currentPage, next];
+  }
+};
+// [1,2,3]
