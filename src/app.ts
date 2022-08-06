@@ -4,6 +4,8 @@ import path from "path";
 import { jsonPath } from "./utils";
 import cors from "cors";
 import fs from "fs";
+import jwt from "jsonwebtoken";
+
 import {
   EditCard,
   pagination,
@@ -42,6 +44,11 @@ const main = async () => {
   const express = require("express");
   const app = express();
   app.use(cors());
+
+  app.get("/login", function (_: any, response: any) {
+    const accessToken = jwt.sign("shhhhh");
+    response.send(accessToken);
+  });
 
   app.get("/ironman.png", function (request: any, response: any) {
     if (request.url === "/ironman.png") {
