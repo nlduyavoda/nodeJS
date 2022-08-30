@@ -1,46 +1,47 @@
 import fs from "fs";
 import { Card } from "../type";
 import { jsonPath } from "../utils";
+import { CardInputType } from './type'
 
 export const parseBody = async (request: any) => {
-  const buffers = [];
+  const buffers = []
 
   for await (const chunk of request) {
-    buffers.push(chunk);
+    buffers.push(chunk)
   }
-  const data = Buffer.concat(buffers).toString();
-  return JSON.parse(data);
-};
+  const data = Buffer.concat(buffers).toString()
+  return JSON.parse(data)
+}
 
 export const EditCard = async ({
   id,
-  request,
+  request
 }: {
-  id: number;
-  request: any;
+  id: number
+  request: any
 }) => {
-  const body = await parseBody(request);
-  const cards = await getCardFromFile(jsonPath);
-  const requestCard = { id: +id, ...body.card };
+  const body = await parseBody(request)
+  const cards = await getCardFromFile(jsonPath)
+  const requestCard = { id: +id, ...body.card }
   const newarr = await cards.map((card: Card) => {
     if (requestCard.id === card.id) {
       return {
         ...card,
         name: requestCard.name,
-        description: requestCard.description,
-      };
+        description: requestCard.description
+      }
     }
-    return card;
-  });
-  const newCards = JSON.stringify(newarr);
+    return card
+  })
+  const newCards = JSON.stringify(newarr)
   await fs.writeFile(jsonPath, newCards, (err) => {
-    console.log(err);
-  });
-  console.log("newCards :>> ", newCards);
-  return JSON.stringify(newCards);
-};
+    console.log(err)
+  })
+  console.log('newCards :>> ', newCards)
+  return JSON.stringify(newCards)
+}
 
-export const saveCard = async (path: string, card: any) => {
+export const saveCard = async (path: string, card: CardInputType) => {
   const newCard = await cardGenerator(card)
   const oldCards = await getCardFromFile(jsonPath)
   const newCards = JSON.stringify([newCard, ...oldCards])
@@ -50,14 +51,14 @@ export const saveCard = async (path: string, card: any) => {
   return JSON.parse(newCards)
 }
 
-export const rebaseCard = async (path: string, rebaseData: any) => {
+export const rebaseCard = async (path: string, rebaseData: CardInputType) => {
   await fs.writeFile(path, JSON.stringify(rebaseData), (err) => {
     console.log('err :>> ', err)
   })
   return rebaseData
 }
 
-export const cardGenerator = (card: Card) => {
+export const cardGenerator = (card: CardInputType) => {
   const id__generator = Math.floor(Math.random() * 100) + 10
   return {
     id: id__generator,
@@ -75,12 +76,14 @@ export const getCardFromFile = async (url: string) => {
 
 export const pagination = async (slug: number) => {
   const cards = await getCardFromFile(jsonPath)
-  const number__item__in__page = 10
+
+  const numberPageItem = 10
   const currentPage = slug - 1
-  const start = currentPage * number__item__in__page
-  const end = start + number__item__in__page
+  const start = currentPage * numberPageItem
+  const end = start + numberPageItem
+
   const cards__paginate = cards.slice(start, end)
-  const totalPage = cards.length / number__item__in__page
+  const totalPage = cards.length / numberPageItem
   return {
     cards: cards__paginate,
     totalPage: totalPage,

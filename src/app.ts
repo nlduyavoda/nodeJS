@@ -60,27 +60,31 @@ const main = async () => {
 
   app.post('/', async (request: any, response: any) => {
     const requestBody = await parseBody(request)
-    if (requestBody.card) {
-      // const data = await saveCard(jsonPath, requestBody.card)
-      // response.status(200).send(data);
+    const input = JSON.parse(requestBody.card)
+    if (input) {
+      const data = await saveCard(jsonPath, input)
+      response.status(200).send({
+        data: data,
+        status: 'POST SUCCESS'
+      })
     }
     if (requestBody.pagin) {
-      // console.log("pagin");
-      // const data = await saveCard(jsonPath, requestBody.card);
-      // response.status(200).send(data);
+      const data = await saveCard(jsonPath, requestBody.card)
+      response.status(200).send({
+        data: data,
+        status: `POST ${requestBody.pagin} SUCCESS`
+      })
     }
     if (requestBody.status) {
-      // console.log("reset all");
-      // const data = await rebaseCard(jsonPath, rebaseData);
-      // response.status(200).send(data);
+      const data = await rebaseCard(jsonPath, rebaseData)
+      response.status(200).send({
+        data: data,
+        status: `POST ${requestBody.status} SUCCESS`
+      })
     }
-    response.status(200).send('post card not okie  :(')
-
-    // response.status(401).send("post card not okie  :(");
   })
 
   app.put('/:slug', async (request: any, response: any) => {
-    console.log('!!request.params.slug :>> ', !!request.params.slug)
     if (!!request.params.slug) {
       const card = await EditCard({
         id: request.params.slug,
@@ -93,9 +97,8 @@ const main = async () => {
   })
 
   app.get('/', async (_: any, res: any) => {
-    // const data = await getCardFromFile();
-    // response.status(200).send(JSON.stringify(data));
-    res.status(200).send('hello')
+    const data = await getCardFromFile()
+    res.status(200).send(JSON.stringify(data))
   })
 
   app.listen(port, () => {
