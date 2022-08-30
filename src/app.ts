@@ -38,67 +38,65 @@ export const getCardFromFile = async () => {
   return JSON.parse(data);
 };
 const main = async () => {
-  const port = process.env.PORT || 8000;
-  const express = require("express");
-  const app = express();
-  app.use(cors());
+  const port = process.env.PORT || 8001
+  const express = require('express')
+  const app = express()
+  app.use(cors())
 
-  app.get("/ironman.png", function (request: any, response: any) {
-    if (request.url === "/ironman.png") {
-      console.log("okie");
-      response.sendFile(
-        path.join(__dirname, "../src/assets/images", "ironman.png")
-      );
+  app.get('/ironman.png', function (req: any, res: any) {
+    if (req.url === '/ironman.png') {
+      console.log('okie')
+      res.sendFile(path.join(__dirname, '../src/assets/images', 'ironman.png'))
     } else {
-      response.status(401).send("Authorization required!");
+      res.status(401).send('Authorization required!')
     }
-  });
+  })
 
-  app.get("/:slug", async (req: any, res: any) => {
-    const currentPage = req.params.slug;
-    console.log("currentPage :>> ", currentPage);
-    const cards = await pagination(currentPage);
-    console.log("cards: ", cards);
-    res.send(cards);
-  });
+  app.get('/:slug', async (req: any, res: any) => {
+    const currentPage = req.params.slug
+    const cards = await pagination(currentPage)
+    res.send(cards)
+  })
 
-  app.post("/", async (request: any, response: any) => {
-    const requestBody = await parseBody(request);
+  app.post('/', async (request: any, response: any) => {
+    const requestBody = await parseBody(request)
     if (requestBody.card) {
-      console.log("post normal");
-      const data = await saveCard(jsonPath, requestBody.card);
-      response.status(200).send(data);
+      // const data = await saveCard(jsonPath, requestBody.card)
+      // response.status(200).send(data);
     }
     if (requestBody.pagin) {
-      console.log("pagin");
-      const data = await saveCard(jsonPath, requestBody.card);
-      response.status(200).send(data);
+      // console.log("pagin");
+      // const data = await saveCard(jsonPath, requestBody.card);
+      // response.status(200).send(data);
     }
     if (requestBody.status) {
-      console.log("reset all");
-      const data = await rebaseCard(jsonPath, rebaseData);
-      response.status(200).send(data);
+      // console.log("reset all");
+      // const data = await rebaseCard(jsonPath, rebaseData);
+      // response.status(200).send(data);
     }
-    response.status(401).send("post card not okie  :(");
-  });
+    response.status(200).send('post card not okie  :(')
 
-  app.put("/:slug", async (request: any, response: any) => {
-    console.log("!!request.params.slug :>> ", !!request.params.slug);
+    // response.status(401).send("post card not okie  :(");
+  })
+
+  app.put('/:slug', async (request: any, response: any) => {
+    console.log('!!request.params.slug :>> ', !!request.params.slug)
     if (!!request.params.slug) {
       const card = await EditCard({
         id: request.params.slug,
-        request: request,
-      });
-      response.status(200).send(card);
+        request: request
+      })
+      response.status(200).send(card)
     } else {
-      response.status(401).send("missing card id");
+      response.status(401).send('missing card id')
     }
-  });
+  })
 
-  app.get("/", async (_: any, response: any) => {
-    const data = await getCardFromFile();
-    response.status(200).send(JSON.stringify(data));
-  });
+  app.get('/', async (_: any, res: any) => {
+    // const data = await getCardFromFile();
+    // response.status(200).send(JSON.stringify(data));
+    res.status(200).send('hello')
+  })
 
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

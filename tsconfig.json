@@ -20,7 +20,7 @@
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": false,
     "baseUrl": "."
   },
   "exclude": ["node_modules"],

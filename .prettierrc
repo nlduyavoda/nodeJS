@@ -1,0 +1,17 @@
+{
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
+      "options": {
+        "tabWidth": 2,
+        "no-eol-whitespace": true,
+        "singleQuote": true,
+        "trailingComma": "none",
+        "bracketSpacing": true,
+        "jsxBracketSameLine": true,
+        "printWidth": 80,
+        "semi": false
+      }
+    }
+  ]
+}

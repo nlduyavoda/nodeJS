@@ -41,63 +41,53 @@ export const EditCard = async ({
 };
 
 export const saveCard = async (path: string, card: any) => {
-  const newCard = await cardGenerator(card);
-  const oldCards = await getCardFromFile(jsonPath);
-  console.log("alexander ------ :>> ", oldCards);
-  const newCards = JSON.stringify([newCard, ...oldCards]);
+  const newCard = await cardGenerator(card)
+  const oldCards = await getCardFromFile(jsonPath)
+  const newCards = JSON.stringify([newCard, ...oldCards])
   await fs.writeFile(path, newCards, (err) => {
-    console.log(err);
-  });
-  return JSON.parse(newCards);
-};
+    console.log(err)
+  })
+  return JSON.parse(newCards)
+}
 
 export const rebaseCard = async (path: string, rebaseData: any) => {
   await fs.writeFile(path, JSON.stringify(rebaseData), (err) => {
-    console.log("err :>> ", err);
-  });
-  return rebaseData;
-};
+    console.log('err :>> ', err)
+  })
+  return rebaseData
+}
 
 export const cardGenerator = (card: Card) => {
-  const id__generator = Math.floor(Math.random() * 100) + 10;
+  const id__generator = Math.floor(Math.random() * 100) + 10
   return {
     id: id__generator,
     name: card.name,
     description: card.description,
-    image: card.image,
-  };
-};
+    image: card.image
+  }
+}
 
 export const getCardFromFile = async (url: string) => {
   // var content;
-  const data = await fs.readFileSync(url, "utf8");
-  return JSON.parse(data);
-};
+  const data = await fs.readFileSync(url, 'utf8')
+  return JSON.parse(data)
+}
 
 export const pagination = async (slug: number) => {
-  const cards = await getCardFromFile(jsonPath);
-  const number__item__in__page = 2;
-  const currentPage = slug - 1;
-  const start = currentPage * number__item__in__page;
-  const end = start + number__item__in__page;
-  const cards__paginate = cards.slice(start, end);
-  const totalPage = cards.length / number__item__in__page;
-
-  // console.log("object :>> ", {
-  //   cards: cards__paginate,
-  //   totalPage: totalPageArr(slug, cards.length),
-  //   isNext: currentPage < cards.length,
-  //   isPrevous: currentPage <= cards.length && currentPage > 1,
-  // });
-
-  // async () => await totalPageArr(slug, cards.length),
+  const cards = await getCardFromFile(jsonPath)
+  const number__item__in__page = 10
+  const currentPage = slug - 1
+  const start = currentPage * number__item__in__page
+  const end = start + number__item__in__page
+  const cards__paginate = cards.slice(start, end)
+  const totalPage = cards.length / number__item__in__page
   return {
     cards: cards__paginate,
     totalPage: totalPage,
     isNext: currentPage < cards.length,
-    isPrevous: currentPage <= cards.length && currentPage > 1,
-  };
-};
+    isPrevous: currentPage <= cards.length && currentPage > 1
+  }
+}
 
 export const totalPageArr = (currentPage: number, cardsLength: number) => {
   const pre = +currentPage - 1;
